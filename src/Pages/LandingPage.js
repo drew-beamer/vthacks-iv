@@ -15,7 +15,7 @@ export default function LandingPage(props) {
     >
       <Box
         sx={{
-          background: "#FFF",
+          background: "#FFFFFF",
           height: "50vh",
           width: { sm: "70vw", md: "50vw" },
           margin: "auto",
