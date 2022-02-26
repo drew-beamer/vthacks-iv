@@ -1,6 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
-import {useEffect, useState} from 'react';
+
 import ResponsiveAppBar from './Components/AppBar';
 import { ThemeProvider } from '@mui/system';
 import { theme } from './theme';
@@ -16,6 +14,8 @@ function App() {
     return <div>Friends</div>
   } else if (page === "resources") {
     return <div>Resources</div>
+  } else if (page === "personal") {
+    return <Personal/>
   }
 
   return (
