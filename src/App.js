@@ -12,6 +12,7 @@ import Settings from "./Pages/Settings";
 
 function App() {
   const [page, setPage] = useState("about");
+  const { loginWithRedirect } = useAuth0();
 
   const getPage = (currPage) => {
     {
@@ -47,11 +48,7 @@ function App() {
       </ThemeProvider>
     );
   } else {
-    return (
-      <ThemeProvider theme={theme}>
-        <LandingPage />
-      </ThemeProvider>
-    );
+    loginWithRedirect();
   }
 }
 
