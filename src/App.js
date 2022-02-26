@@ -7,10 +7,10 @@ import { theme } from "./theme";
 import About from "./Pages/About";
 import LandingPage from "./Pages/LandingPage";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import FriendPage from "./Pages/FriendPage";
 
 function App() {
-  const [page, setPage] = useState("about");
+  const [page, setPage] = useState("settings");
 
   const getPage = (currPage) => {
     {
@@ -23,7 +23,7 @@ function App() {
       } else if (currPage === "resources") {
         return <div>Resources</div>;
       } else if (currPage === "settings") {
-        return <div>Settings</div>;
+        return <FriendPage/>;
       }
     }
   };
