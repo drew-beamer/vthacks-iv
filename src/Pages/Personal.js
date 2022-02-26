@@ -13,8 +13,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { ResponsiveLine } from '@nivo/line'
-
-
+<script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
 function createData(Date, Status, Amount) {
   return { Date, Status, Amount };
 }
@@ -74,6 +73,9 @@ const BasicCard = () => {
           $3,024.00
         </Typography>
         <Typography sx={{ fontSize: 20 }} color="Black" gutterBottom>
+        <br />
+        <br />
+        <br />
           On 2022.02.25
         </Typography>
           
@@ -132,6 +134,7 @@ const MyResponsiveLine = ({ data }) => (
           reverse: false
       }}
       yFormat=" >-.2f"
+      curve="cardinal"
       axisTop={null}
       axisRight={null}
       axisBottom={{
@@ -139,7 +142,7 @@ const MyResponsiveLine = ({ data }) => (
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'transportation',
+          legend: 'Date',
           legendOffset: 36,
           legendPosition: 'middle'
       }}
@@ -148,7 +151,7 @@ const MyResponsiveLine = ({ data }) => (
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'count',
+          legend: 'Amount',
           legendOffset: -40,
           legendPosition: 'middle'
       }}
@@ -190,22 +193,22 @@ export default function Personal() {
     return (
     <Grid container spacing={2}>
     <Grid item xs={16} md={9}>
-      <Box boxShadow={3} sx={{height: 350, background: "#FFF"}}>
+      <Box boxShadow={3} sx={{height: 300, background: "#FFF"}}>
       {MyResponsiveLine({data})}
       </Box>
     </Grid>
     <Grid item xs={6} md={3}>
-      <Box boxShadow={3} sx={{height: 350, background: "#FFF"}}>
+      <Box boxShadow={3} sx={{height: 290, background: "#FFF"}}>
       {BasicCard()}
       </Box>
     </Grid>
     <Grid item xs={30} md={12}>
-      <Box boxShadow={3} sx={{height: 270, background: "#FFF"}}>
+      <Box boxShadow={3} sx={{height: 250, background: "#FFF"}}>
       {BasicTable()}
       </Box>
     </Grid>
   </Grid>
-);
-    
+);   
 }  
+ 
 
