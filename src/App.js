@@ -1,17 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import {useEffect, useState} from 'react';
+import Resources from './Pages/Resources';
 
 function App() {
 
-  const [page, setPage] = useState("default");
+  const [page, setPage] = useState("resources");
 
   if (page === "default") {
     return <div>Home</div>
   } else if (page === "friends") {
     return <div>Friends</div>
   } else if (page === "resources") {
-    return <div>Resources</div>
+    return <Resources/>
   }
 
   return (
