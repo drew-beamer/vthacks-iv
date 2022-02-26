@@ -4,7 +4,19 @@ import { createTheme } from "@mui/material/styles";
 
 
 export const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#138A36"
+        },
+        secondary: {
+            main: "#285238"
+        }
+    },
     typography: {
-        fontFamily: "Work Sans"
+        fontFamily: "Work Sans",
+        button: {
+            fontSize: 24,
+            fontWeight: 300
+        }
     }
 })
