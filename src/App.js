@@ -7,6 +7,7 @@ import { theme } from "./theme";
 import About from "./Pages/About";
 import LandingPage from "./Pages/LandingPage";
 import { useAuth0 } from "@auth0/auth0-react";
+import Settings from "./Pages/Settings";
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
       } else if (currPage === "resources") {
         return <div>Resources</div>;
       } else if (currPage === "settings") {
-        return <div>Settings</div>;
+        return <Settings/>;
       }
     }
   };
