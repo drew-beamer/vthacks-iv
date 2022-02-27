@@ -162,7 +162,7 @@ export default function BasicGrid(props) {
           friendsOnly.length ? setRows(
             friendsOnly.map((friend) => {
               return createData(friend.nickname, friend.balance);
-            })
+            }).sort((a, b) => (a.money > b.money) ? -1 : 1)
           ) : setRows([]);
         },
         (error) => {
