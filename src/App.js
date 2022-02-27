@@ -23,7 +23,7 @@ function App() {
       } else if (currPage === "about") {
         return <About />;
       } else if (currPage === "friends") {
-        return <Friends/>;
+        return <Friends user={user}/>;
       } else if (currPage === "resources") {
         return <Resources />;
       } else if (currPage === "settings") {
