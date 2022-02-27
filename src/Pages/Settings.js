@@ -241,7 +241,7 @@ export default function Settings(props) {
   } else {
     return (
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={12}>
+        <Grid item xs={12} md={6}>
           <Box sx={{ width: "100%" }}>
             <Box
               sx={{
@@ -249,6 +249,7 @@ export default function Settings(props) {
                 background: "#FFF",
                 borderRadius: 2.5,
                 boxShadow: 3,
+                height: 125
               }}
             >
               <Box sx={{ p: 3 }}>
@@ -259,6 +260,22 @@ export default function Settings(props) {
               </Box>
             </Box>
           </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+        <Box
+              sx={{
+                width: "100%",
+                background: "#FFF",
+                borderRadius: 2.5,
+                boxShadow: 3,
+                height: 125
+              }}
+            >
+            <Box sx={{p:3}}>
+            <Typography variant="h4">user id:</Typography>
+            <Typography variant="h6">{props.user.sub}</Typography>
+            </Box>
+            </Box>
         </Grid>
       </Grid>
     );
