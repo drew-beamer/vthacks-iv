@@ -57,26 +57,13 @@ const columns = [
   */
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(name, money) {
+  return { name, money};
 }
 
 function createRank(name, balance) {
   return { name, balance };
 }
-
-const rows = [
-  createData("Spencer", "IN", 1324171354, 3287263),
-  createData("Cash", "CN", 1403500365, 9596961),
-  createData("Riley", "IT", 60483973, 301340),
-  createData("Drew", "US", 327167434, 9833520),
-  createData("Brendon", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-];
 
 //code to save from earlier
 const Item = styled(Paper)(({ theme }) => ({
@@ -109,6 +96,7 @@ export default function BasicGrid(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [mooFriends, setFriends] = React.useState([]);
   const [friendAccounts, setFriendAccounts] = React.useState([]);
+  const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
     fetch("https://moolahmoney.us.auth0.com/api/v2/users/" + props.user.sub, {
@@ -128,27 +116,58 @@ export default function BasicGrid(props) {
 
   React.useEffect(() => {
     fetch("https://moolahmoney.us.auth0.com/api/v2/users", {
-        method: "GET",
-        headers: { Authorization: "Bearer " + process.env.REACT_APP_AUTH0 },
-      })
+      method: "GET",
+      headers: { Authorization: "Bearer " + process.env.REACT_APP_AUTH0 },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          const filteredFriends = result.filter((u) => {
+            return mooFriends.includes(u.user_id);
+          });
+          const bankFriends = filteredFriends.filter((u) => {
+            if ("user_metadata" in u) {
+                if ("cap_one_id" in u.user_metadata) {
+                  return true;
+                }
+              }
+            return false
+          })
+          setFriendAccounts(
+            bankFriends.map((ff) => {
+                  return ff.user_metadata.cap_one_id;
+            })
+          );
+        },
+        (error) => {
+          console.log("error with api: " + error);
+        }
+      );
+  }, [mooFriends]);
+
+  React.useEffect(() => {
+    fetch(
+        "http://api.nessieisreal.com/accounts" + 
+          "?key=" +
+          process.env.REACT_APP_CAP_ONE
+      )
         .then((res) => res.json())
         .then(
           (result) => {
-            const filteredFriends = result.filter((u) => {
-                return mooFriends.includes(u.user_id);
+            const friendsOnly = result.filter((indvAccount) => {
+                return friendAccounts.includes(indvAccount._id)
             })
-            setFriendAccounts(filteredFriends.map((ff) => {return ff.user_metadata.cap_one_id}))
+            console.log(friendsOnly)
+            setRows(friendsOnly.map((friend) => {
+                createData(friend.nickname, friend.balance);
+            }))
           },
           (error) => {
             console.log("error with api: " + error);
           }
         );
-  }, [mooFriends])
 
-
-  React.useEffect(() => {
-    console.log(friendAccounts)
-  }, [friendAccounts])
+  }, [friendAccounts]);
 
   const add_friend = (friend) => {
     fetch("https://moolahmoney.us.auth0.com/api/v2/users/" + props.user.sub, {
@@ -201,9 +220,7 @@ export default function BasicGrid(props) {
   const [FriendID, setFriendID] = React.useState("");
   const handleChange = (e) => {
     setFriendID(e.target.value);
-    console.log(FriendID);
   };
-  console.log(FriendID);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
