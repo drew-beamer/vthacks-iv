@@ -15,7 +15,8 @@ import Friends from "./Pages/FriendPage";
 function App() {
   const [page, setPage] = useState("about");
   const { loginWithRedirect } = useAuth0();
-  const getPage = (currPage) => {
+
+  const getPage = (currPage, user) => {
     {
       if (currPage === "home") {
         return <div>Home</div>;
@@ -26,7 +27,7 @@ function App() {
       } else if (currPage === "resources") {
         return <Resources />;
       } else if (currPage === "settings") {
-        return <Settings/>;
+        return <Settings user={user}/>;
       } else if (currPage === "profile") {
         return <Personal/>;
       }
@@ -40,7 +41,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Box>
           <ResponsiveAppBar user={user} changePage={setPage}/>
-          <Box sx={{ p: 3 }}>{getPage(page)}</Box>
+          <Box sx={{ p: 3 }}>{getPage(page, user)}</Box>
         </Box>
       </ThemeProvider>
     );
