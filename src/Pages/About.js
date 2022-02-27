@@ -10,7 +10,6 @@ import ImageListItem from "@mui/material/ImageListItem";
 
 //import background from "https://images.unsplash.com/photo-1440428099904-c6d459a7e7b5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
 const myStyle={
-    backgroundImage: `url(${process.env.PUBLIC_URL+ "AboutUS.jpg"})`,
     height:'100vh',
     marginTop:'20px',
     fontSize:'50px',
