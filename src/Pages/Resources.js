@@ -23,7 +23,7 @@ export default function BasicGrid() {
           <Box sx={{ background: "#FFF", borderRadius: 2.5, boxShadow: 3, p: 3 }}>
             <Box sx={{display: "flex", m: "auto", width: "100%", height: "60vh"}}>
               <iframe class='responsive-iframe'
-                src='https://www.youtube.com/embed/3MK958faEhQ'
+                src='https://www.youtube.com/embed/rHYj6W9gJNk'
                 frameborder='0'
                 allow='autoplay; encrypted-media; fullscreen'
                 title='video'/>
