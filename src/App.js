@@ -5,28 +5,26 @@ import ResponsiveAppBar from "./Components/AppBar";
 import { Box, ThemeProvider } from "@mui/system";
 import { theme } from "./theme";
 import About from "./Pages/About";
-import LandingPage from "./Pages/LandingPage";
+import Resources from "./Pages/Resources";
 import { useAuth0 } from "@auth0/auth0-react";
 import Personal from "./Pages/Personal";
 import Settings from "./Pages/Settings";
-
+import Friends from "./Pages/FriendPage";
 
 function App() {
   const [page, setPage] = useState("about");
   const { loginWithRedirect } = useAuth0();
 
-  const getPage = (currPage) => {
+  const getPage = (currPage, user) => {
     {
-      if (currPage === "home") {
-        return <div>Home</div>;
-      } else if (currPage === "about") {
+      if (currPage === "about") {
         return <About />;
       } else if (currPage === "friends") {
-        return <div>Friends</div>;
+        return <Friends user={user}/>;
       } else if (currPage === "resources") {
-        return <div>Resources</div>;
+        return <Resources />;
       } else if (currPage === "settings") {
-        return <Settings/>;
+        return <Settings user={user}/>;
       } else if (currPage === "profile") {
         return <Personal/>;
       }
@@ -40,7 +38,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Box>
           <ResponsiveAppBar user={user} changePage={setPage}/>
-          <Box sx={{ p: 3 }}>{getPage(page)}</Box>
+          <Box sx={{ p: 3 }}>{getPage(page, user)}</Box>
         </Box>
       </ThemeProvider>
     );

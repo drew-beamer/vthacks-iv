@@ -262,6 +262,5 @@ export default function Personal() {
         </Box>
       </Grid>
     </Grid>
-
   );
 }
