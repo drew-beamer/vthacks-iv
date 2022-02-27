@@ -6,15 +6,6 @@ import Grid from '@mui/material/Grid';
 import "./Resources.css"
 import { Typography } from '@mui/material';
 
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
 export default function BasicGrid() {
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -22,7 +13,7 @@ export default function BasicGrid() {
         <Grid item xs={12} md={12}>
         <Box sx={{ background: "#FFF", borderRadius: 2.5, boxShadow: 3, p: 3 }}>
             <Box>
-              <Typography variant = "h4">Feel lost? Watch this crash course in financial literacy with our mascot, Cash the cow:</Typography>
+              <Typography variant = "h5">Feel lost? Watch this crash course in financial literacy with our mascot, Cash the cow:</Typography>
               
               </Box>
           </Box>
