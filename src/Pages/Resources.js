@@ -13,7 +13,8 @@ export default function BasicGrid() {
         <Grid item xs={12} md={12}>
         <Box sx={{ background: "#FFF", borderRadius: 2.5, boxShadow: 3, p: 3 }}>
             <Box>
-              <Typography variant = "h5">Feel lost? Watch this crash course in financial literacy with our mascot, Cash the cow:</Typography>
+              <Typography variant = "h4">feel lost? <Typography variant="h6">watch this crash course in financial literacy with our mascot, cash the cow:
+                  </Typography></Typography>
               
               </Box>
           </Box>

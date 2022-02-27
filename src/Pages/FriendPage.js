@@ -25,20 +25,20 @@ import TextField from "@mui/material/TextField";
 //import { useState } from "react";
 //import Reactt, { useEffect, useState } from "react";
 
-
-
 //<TextField value={value} variant="outlined" onChange={} />
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
   {
     id: "population",
-    label: "Population",
+    label: "Balance",
     minWidth: 170,
     align: "right",
     format: (value) => value.toLocaleString("en-US"),
   },
+
+  /*
+  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
   {
     id: "size",
     label: "Size\u00a0(km\u00b2)",
@@ -53,24 +53,17 @@ const columns = [
     align: "right",
     format: (value) => value.toFixed(2),
   },
+
+  */
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(name, money) {
+  return { name, money};
 }
 
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-];
+function createRank(name, balance) {
+  return { name, balance };
+}
 
 //code to save from earlier
 const Item = styled(Paper)(({ theme }) => ({
@@ -96,11 +89,124 @@ const itemData = [
   },
 ];
 
-export default function BasicGrid() {
+export default function BasicGrid(props) {
   const [value, setValue] = React.useState(2);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [mooFriends, setFriends] = React.useState([]);
+  const [friendAccounts, setFriendAccounts] = React.useState([]);
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("https://moolahmoney.us.auth0.com/api/v2/users/" + props.user.sub, {
+      method: "GET",
+      headers: { Authorization: "Bearer " + process.env.REACT_APP_AUTH0 },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setFriends(result.user_metadata.friends);
+        },
+        (error) => {
+          console.log("error with api: " + error);
+        }
+      );
+  }, []);
+
+  React.useEffect(() => {
+    fetch("https://moolahmoney.us.auth0.com/api/v2/users", {
+      method: "GET",
+      headers: { Authorization: "Bearer " + process.env.REACT_APP_AUTH0 },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          const filteredFriends = result.filter((u) => {
+            return mooFriends.includes(u.user_id);
+          });
+          const bankFriends = filteredFriends.filter((u) => {
+            if ("user_metadata" in u) {
+                if ("cap_one_id" in u.user_metadata) {
+                  return true;
+                }
+              }
+            return false
+          })
+          setFriendAccounts(
+            bankFriends.map((ff) => {
+                  return ff.user_metadata.cap_one_id;
+            })
+          );
+        },
+        (error) => {
+          console.log("error with api: " + error);
+        }
+      );
+  }, [mooFriends]);
+
+  React.useEffect(() => {
+    fetch(
+        "http://api.nessieisreal.com/accounts" + 
+          "?key=" +
+          process.env.REACT_APP_CAP_ONE
+      )
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            const friendsOnly = result.filter((indvAccount) => {
+                return friendAccounts.includes(indvAccount._id)
+            })
+            console.log(friendsOnly)
+            setRows(friendsOnly.map((friend) => {
+                createData(friend.nickname, friend.balance);
+            }))
+          },
+          (error) => {
+            console.log("error with api: " + error);
+          }
+        );
+
+  }, [friendAccounts]);
+
+  const add_friend = (friend) => {
+    fetch("https://moolahmoney.us.auth0.com/api/v2/users/" + props.user.sub, {
+      method: "GET",
+      headers: { Authorization: "Bearer " + process.env.REACT_APP_AUTH0 },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          fetch(
+            "https://moolahmoney.us.auth0.com/api/v2/users/" + props.user.sub,
+            {
+              method: "PATCH",
+              headers: {
+                authorization: "Bearer " + process.env.REACT_APP_AUTH0,
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                user_metadata: {
+                  friends: [...result.user_metadata.friends, friend],
+                },
+              }),
+            }
+          )
+            .then((res) => res.json())
+            .then(
+              (result) => {
+                console.log(result);
+              },
+              (error) => {
+                console.log("error with api: " + error);
+              }
+            );
+        },
+        (error) => {
+          console.log("error with api: " + error);
+        }
+      );
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -111,26 +217,15 @@ export default function BasicGrid() {
     setPage(0);
   };
 
-  const [FriendID, setFriendID] = React.useState("Enter Friend ID");
+  const [FriendID, setFriendID] = React.useState("");
   const handleChange = (e) => {
     setFriendID(e.target.value);
-    console.log(FriendID);
   };
-  console.log(FriendID);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid item xs={8} md={6}>
-          <Item>Compare your wealth</Item>
-        </Grid>
-
-
-        <Grid item xs={4} md={4}>
-          <Item> Let's put an icon here </Item>
-        </Grid>
-
-        <Grid item xs={8} md={6}>
+        <Grid item xs={12} md={7}>
           <Box
             textAlign="center"
             sx={{ background: "#FFF", p: 3, boxShadow: 3, borderRadius: 2.5 }}
@@ -197,78 +292,87 @@ export default function BasicGrid() {
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Paper>
-              How much money have you made?
             </Item>
           </Box>
         </Grid>
 
-        <Grid item xs={8} md={4}>
-          <Box
-            textAlign="center"
-            sx={{ background: "#FFF", p: 3, boxShadow: 3, borderRadius: 2.5 }}
-          >
-            <Typography variant="h6">add friend</Typography>
-            <Box
-              component="form"
-              sx={{
-                "& > :not(style)": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                required
-                id="outlined-required"
-                label="Friend ID"
-                variant="outlined"
-                value={FriendID}
-                onChange={handleChange}
-              />
-            </Box>
+        <Grid item xs={12} md={5}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Box
+                textAlign="center"
+                sx={{
+                  background: "#FFF",
+                  p: 3,
+                  boxShadow: 3,
+                  borderRadius: 2.5,
+                }}
+              >
+                <Typography variant="h4">add/remove friend</Typography>
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "75%", mt: 3 },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    id="outlined-required"
+                    label="Friend ID"
+                    variant="outlined"
+                    value={FriendID}
+                    onChange={handleChange}
+                  />
+                </Box>
+                <Grid container sx={{ pt: 2 }} spacing={2}>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        add_friend(FriendID);
+                        alert("friend added :)");
+                      }}
+                    >
+                      add friend
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                textAlign="center"
+                sx={{
+                  background: "#FFF",
+                  p: 3,
+                  boxShadow: 3,
+                  borderRadius: 2.5,
+                }}
+              >
+                <Typography variant="h6">
+                  Don't overstres about money, and look at these public domain
+                  photos of cows
+                </Typography>
+              </Box>
 
-            <Button
-              variant="contained"
-              onClick={() => {
-                alert("friend added :)");
-              }}
-            >
-              add friend
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                alert("friend removed :(");
-              }}
-            >
-              remove friend
-            </Button>
-          </Box>
-        </Grid>
-
-        <Grid item xs={8} md={3.5}>
-          <Grid item xs={8} md={12}>
-            <Item>
-              <h3>
-                Don't overstres about money, and look at these public domain
-                photos of cows
-              </h3>{" "}
-            </Item>
+              <ImageList cols={3} sx={{ pt: 1 }} rowHeight={164}>
+                {itemData.map((item) => (
+                  <ImageListItem key={item.img}>
+                    <img
+                      src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                      srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </Grid>
           </Grid>
-          <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-            {itemData.map((item) => (
-              <ImageListItem key={item.img}>
-                <img
-                  src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
         </Grid>
-
-        
       </Grid>
     </Box>
   );

@@ -15,7 +15,7 @@ export const theme = createTheme({
     typography: {
         fontFamily: "Work Sans",
         button: {
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 300
         }
     }
