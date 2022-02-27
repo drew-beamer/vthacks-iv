@@ -19,8 +19,8 @@ const myStyle={
 };
 export default function BasicGrid() {
   return (
-    
-    
+
+
     <div style={myStyle}>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
@@ -34,6 +34,6 @@ export default function BasicGrid() {
       </Grid>
     </Box>
     </div>
-    
+
   );
 }

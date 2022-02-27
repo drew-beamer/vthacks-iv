@@ -6,7 +6,6 @@ import { Box, ThemeProvider } from "@mui/system";
 import { theme } from "./theme";
 import About from "./Pages/About";
 import Resources from "./Pages/Resources";
-import LandingPage from "./Pages/LandingPage";
 import { useAuth0 } from "@auth0/auth0-react";
 import Personal from "./Pages/Personal";
 import Settings from "./Pages/Settings";
@@ -18,9 +17,7 @@ function App() {
 
   const getPage = (currPage, user) => {
     {
-      if (currPage === "home") {
-        return <LandingPage/>;
-      } else if (currPage === "about") {
+      if (currPage === "about") {
         return <About />;
       } else if (currPage === "friends") {
         return <Friends user={user}/>;
