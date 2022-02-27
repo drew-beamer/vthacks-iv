@@ -78,7 +78,7 @@ const BasicCard = () => {
         <br />
           On 2022.02.25
         </Typography>
-          
+
       </CardContent>
     </Card>
   );
@@ -208,7 +208,7 @@ export default function Personal() {
       </Box>
     </Grid>
   </Grid>
+
 );   
 }  
- 
 
