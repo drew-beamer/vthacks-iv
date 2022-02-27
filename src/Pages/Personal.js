@@ -13,7 +13,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { ResponsiveLine } from '@nivo/line'
-<script data-main="lib/capital_one" src="lib/require-jquery.js"></script>
+
 function createData(Date, Status, Amount) {
   return { Date, Status, Amount };
 }
