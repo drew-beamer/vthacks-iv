@@ -5,16 +5,16 @@ import ResponsiveAppBar from "./Components/AppBar";
 import { Box, ThemeProvider } from "@mui/system";
 import { theme } from "./theme";
 import About from "./Pages/About";
+import Resources from "./Pages/Resources";
 import LandingPage from "./Pages/LandingPage";
 import { useAuth0 } from "@auth0/auth0-react";
 import Personal from "./Pages/Personal";
 import Settings from "./Pages/Settings";
-
+import Friends from "./Pages/FriendPage";
 
 function App() {
   const [page, setPage] = useState("about");
   const { loginWithRedirect } = useAuth0();
-
   const getPage = (currPage) => {
     {
       if (currPage === "home") {
@@ -22,9 +22,9 @@ function App() {
       } else if (currPage === "about") {
         return <About />;
       } else if (currPage === "friends") {
-        return <div>Friends</div>;
+        return <Friends/>;
       } else if (currPage === "resources") {
-        return <div>Resources</div>;
+        return <Resources />;
       } else if (currPage === "settings") {
         return <Settings/>;
       } else if (currPage === "profile") {
