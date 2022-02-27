@@ -25,20 +25,20 @@ import TextField from "@mui/material/TextField";
 //import { useState } from "react";
 //import Reactt, { useEffect, useState } from "react";
 
-
-
 //<TextField value={value} variant="outlined" onChange={} />
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
   {
     id: "population",
-    label: "Population",
+    label: "Balance",
     minWidth: 170,
     align: "right",
     format: (value) => value.toLocaleString("en-US"),
   },
+
+  /*
+  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
   {
     id: "size",
     label: "Size\u00a0(km\u00b2)",
@@ -53,6 +53,8 @@ const columns = [
     align: "right",
     format: (value) => value.toFixed(2),
   },
+
+  */
 ];
 
 function createData(name, code, population, size) {
@@ -60,12 +62,20 @@ function createData(name, code, population, size) {
   return { name, code, population, size, density };
 }
 
+function createRank(name, balance) {
+  return { name, balance};
+}
+
+
+
+
+
 const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
+  createData("Spencer", "IN", 1324171354, 3287263),
+  createData("Cash", "CN", 1403500365, 9596961),
+  createData("Riley", "IT", 60483973, 301340),
+  createData("Drew", "US", 327167434, 9833520),
+  createData("Brendon", "CA", 37602103, 9984670),
   createData("Australia", "AU", 25475400, 7692024),
   createData("Germany", "DE", 83019200, 357578),
   createData("Ireland", "IE", 4857000, 70273),
@@ -125,12 +135,11 @@ export default function BasicGrid() {
           <Item>Compare your wealth</Item>
         </Grid>
 
-
-        <Grid item xs={4} md={4}>
+        <Grid item xs={4} md={6}>
           <Item> Let's put an icon here </Item>
         </Grid>
 
-        <Grid item xs={8} md={6}>
+        <Grid item xs={12} md={7}>
           <Box
             textAlign="center"
             sx={{ background: "#FFF", p: 3, boxShadow: 3, borderRadius: 2.5 }}
@@ -202,7 +211,7 @@ export default function BasicGrid() {
           </Box>
         </Grid>
 
-        <Grid item xs={8} md={4}>
+        <Grid item xs={12} md={5}>
           <Box
             textAlign="center"
             sx={{ background: "#FFF", p: 3, boxShadow: 3, borderRadius: 2.5 }}
@@ -243,32 +252,43 @@ export default function BasicGrid() {
               remove friend
             </Button>
           </Box>
-        </Grid>
 
-        <Grid item xs={8} md={3.5}>
           <Grid item xs={8} md={12}>
-            <Item>
-              <h3>
-                Don't overstres about money, and look at these public domain
-                photos of cows
-              </h3>{" "}
-            </Item>
-          </Grid>
-          <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-            {itemData.map((item) => (
-              <ImageListItem key={item.img}>
-                <img
-                  src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
-        </Grid>
+            <Grid item xs={8} md={12}>
+              <Box
+                textAlign="center"
+                sx={{
+                  background: "#FFF",
+                  p: 3,
+                  boxShadow: 3,
+                  borderRadius: 2.5,
+                }}
+              >
+                <Typography variant="h6">
+                  Don't overstres about money, and look at these public domain
+                  photos of cows
+                </Typography>
+              </Box>
 
-        
+              <ImageList
+                sx={{ width: 607, height: 650 }}
+                cols={3}
+                rowHeight={164}
+              >
+                {itemData.map((item) => (
+                  <ImageListItem key={item.img}>
+                    <img
+                      src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                      srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
     </Box>
   );
