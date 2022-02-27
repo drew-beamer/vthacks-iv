@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 
 export default function Settings(props) {
   const [idNum, setIdNum] = useState("");
@@ -250,7 +250,14 @@ export default function Settings(props) {
                 borderRadius: 2.5,
                 boxShadow: 3,
               }}
-            ><Box sx={{p: 3}}><Typography variant={"h4"}><CheckIcon color="primary" sx={{fontSize: 36}}/> Account Added!</Typography></Box></Box>
+            >
+              <Box sx={{ p: 3 }}>
+                <Typography variant={"h4"}>
+                  <CheckIcon color="primary" sx={{ fontSize: 36 }} /> Account
+                  Added!
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </Grid>
       </Grid>

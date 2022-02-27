@@ -12,7 +12,11 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { ResponsiveLine } from '@nivo/line'
+import { ResponsiveLine } from '@nivo/line';
+import {useEffect} from 'react';
+
+
+
 
 function createData(Date, Status, Amount) {
   return { Date, Status, Amount };
@@ -190,6 +194,45 @@ const MyResponsiveLine = ({ data }) => (
   />
 )
 export default function Personal() {
+    const [deposits, setDeposits] = React.useState([])
+    const [withdrawals, setWithdrawals] = React.useState([])
+
+    useEffect(() => {
+        fetch(
+            "http://api.nessieisreal.com/accounts/" + "621a662c31d61b772ac8bef3" + "/deposits" + "?key=" + process.env.REACT_APP_CAP_ONE
+          )
+            .then((res) => res.json())
+            .then(
+              (result) => {
+                setDeposits(result)
+              },
+              (error) => {
+                console.log("error with api: " + error);
+              }
+            );
+
+        fetch(
+            "http://api.nessieisreal.com/accounts/" + "621a662c31d61b772ac8bef3" + "/withdrawals" + "?key=" + process.env.REACT_APP_CAP_ONE
+            )
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                setWithdrawals(result)
+                },
+                (error) => {
+                console.log("error with api: " + error);
+                }
+            );
+    }, [])
+
+    useEffect(() => {
+        console.log(deposits)
+    }, [deposits])
+
+    useEffect(() => {
+        console.log(withdrawals)
+    }, [withdrawals])
+
     return (
     <Grid container spacing={2}>
     <Grid item xs={16} md={9}>
@@ -209,6 +252,5 @@ export default function Personal() {
     </Grid>
   </Grid>
 
-);   
-}  
-
+);
+}
