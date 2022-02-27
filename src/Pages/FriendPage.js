@@ -58,7 +58,7 @@ const columns = [
 ];
 
 function createData(name, money) {
-  return { name, money};
+  return { name, money };
 }
 
 function createRank(name, balance) {
@@ -125,17 +125,19 @@ export default function BasicGrid(props) {
           const filteredFriends = result.filter((u) => {
             return mooFriends.includes(u.user_id);
           });
+
+        
           const bankFriends = filteredFriends.filter((u) => {
             if ("user_metadata" in u) {
-                if ("cap_one_id" in u.user_metadata) {
-                  return true;
-                }
+              if ("cap_one_id" in u.user_metadata) {
+                return true;
               }
-            return false
-          })
+            }
+            return false;
+          });
           setFriendAccounts(
             bankFriends.map((ff) => {
-                  return ff.user_metadata.cap_one_id;
+              return ff.user_metadata.cap_one_id;
             })
           );
         },
@@ -147,26 +149,26 @@ export default function BasicGrid(props) {
 
   React.useEffect(() => {
     fetch(
-        "http://api.nessieisreal.com/accounts" + 
-          "?key=" +
-          process.env.REACT_APP_CAP_ONE
-      )
-        .then((res) => res.json())
-        .then(
-          (result) => {
-            const friendsOnly = result.filter((indvAccount) => {
-                return friendAccounts.includes(indvAccount._id)
+      "http://api.nessieisreal.com/accounts" +
+        "?key=" +
+        process.env.REACT_APP_CAP_ONE
+    )
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          const friendsOnly = result.filter((indvAccount) => {
+            return friendAccounts.includes(indvAccount["_id"]);
+          });
+          friendsOnly.length ? setRows(
+            friendsOnly.map((friend) => {
+              return createData(friend.nickname, friend.balance);
             })
-            console.log(friendsOnly)
-            setRows(friendsOnly.map((friend) => {
-                createData(friend.nickname, friend.balance);
-            }))
-          },
-          (error) => {
-            console.log("error with api: " + error);
-          }
-        );
-
+          ) : setRows([]);
+        },
+        (error) => {
+          console.log("error with api: " + error);
+        }
+      );
   }, [friendAccounts]);
 
   const add_friend = (friend) => {
@@ -187,7 +189,7 @@ export default function BasicGrid(props) {
               },
               body: JSON.stringify({
                 user_metadata: {
-                  friends: [...result.user_metadata.friends, friend],
+                  friends: ("friends" in result.user_metadata)? [...result.user_metadata.friends, friend] : [friend],
                 },
               }),
             }
@@ -208,15 +210,6 @@ export default function BasicGrid(props) {
       );
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   const [FriendID, setFriendID] = React.useState("");
   const handleChange = (e) => {
     setFriendID(e.target.value);
@@ -232,67 +225,30 @@ export default function BasicGrid(props) {
           >
             <Typography variant="h4">friend rankings</Typography>
 
-            <Item>
-              <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                  <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{ minWidth: column.minWidth }}
-                          >
-                            {column.label}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                        .map((row) => {
-                          return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={row.code}
-                            >
-                              {columns.map((column) => {
-                                const value = row[column.id];
-                                return (
-                                  <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                  >
-                                    {column.format && typeof value === "number"
-                                      ? column.format(value)
-                                      : value}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          );
-                        })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={[10, 25, 100]}
-                  component="div"
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </Paper>
-            </Item>
+            <TableContainer component={Paper}>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell align="right">Balance</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows[0] !== undefined ? rows.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.money}</TableCell>
+            </TableRow>
+          )) : null}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  
           </Box>
         </Grid>
 
