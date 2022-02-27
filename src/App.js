@@ -19,7 +19,7 @@ function App() {
   const getPage = (currPage, user) => {
     {
       if (currPage === "home") {
-        return <div>Home</div>;
+        return <LandingPage/>;
       } else if (currPage === "about") {
         return <About />;
       } else if (currPage === "friends") {
